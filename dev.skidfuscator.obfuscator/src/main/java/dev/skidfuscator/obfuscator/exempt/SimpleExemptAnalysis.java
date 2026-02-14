@@ -24,8 +24,6 @@ public class SimpleExemptAnalysis implements ExemptAnalysis {
     public void add(final String exclusionStr) {
         final Exclusion exclusion = ExclusionHelper.renderExclusion(exclusionStr);
         exclusions.add(exclusion);
-
-        //System.out.println(this);
     }
 
     public void add(final Exclusion exclusion) {
@@ -75,6 +73,9 @@ public class SimpleExemptAnalysis implements ExemptAnalysis {
 
         for (Exclusion exclusion : exclusions) {
             //System.out.println("Testing " + exclusion);
+            if (exclusion.has(ExclusionType.METHOD)) {
+                continue;
+            }
             try {
                 if (exclusion.test(classNode)) {
                     classCache.put(classNode, true);

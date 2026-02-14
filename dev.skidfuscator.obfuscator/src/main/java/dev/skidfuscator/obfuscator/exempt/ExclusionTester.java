@@ -7,4 +7,8 @@ public interface ExclusionTester<T> {
      * @return Debug output to understand the testing
      */
     String toString();
+
+    default boolean hasPriority() {
+        return false;
+    }
 }

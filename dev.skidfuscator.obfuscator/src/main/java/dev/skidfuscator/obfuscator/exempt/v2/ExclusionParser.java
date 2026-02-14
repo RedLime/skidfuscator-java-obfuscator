@@ -24,7 +24,7 @@ public class ExclusionParser {
 
     private static final Set<String> MODIFIERS = Set.of(
             "public", "private", "protected", "static", "final", "abstract",
-            "volatile", "transient", "synchronized", "native", "strictfp"
+            "volatile", "transient", "synchronized", "native", "strictfp", "synthetic", "bridge"
     );
 
     private static final Pattern TYPE_PATTERN = Pattern.compile(
@@ -640,6 +640,7 @@ public class ExclusionParser {
                         case "static": if (!var.isStatic()) return false; break;
                         case "final": if (!var.isFinal()) return false; break;
                         case "abstract": if (!var.isAbstract()) return false; break;
+                        case "synthetic": if (!var.isSynthetic()) return false; break;
                     }
                 }
 
@@ -721,6 +722,11 @@ public class ExclusionParser {
             public String toString() {
                 return "MethodTester[class=" + classRegex.pattern() + ", patterns=" + methodPatterns.size() + "]";
             }
+
+            @Override
+            public boolean hasPriority() {
+                return !methodPatterns.isEmpty();
+            }
         });
     }
 
@@ -755,6 +761,8 @@ public class ExclusionParser {
                     case "final": if (!method.isFinal()) return false; break;
                     case "abstract": if (!method.isAbstract()) return false; break;
                     case "native": if (!method.isNative()) return false; break;
+                    case "bridge": if (!method.isBridge()) return false; break;
+                    case "synthetic": if (!method.isSynthetic()) return false; break;
                 }
             }
 
